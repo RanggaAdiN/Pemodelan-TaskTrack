@@ -1,0 +1,102 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+struct Task {
+    string description;
+    bool isCompleted;
+};
+
+void displayMenu() {
+    cout << "\nTo-Do List Menu:" << endl;
+    cout << "1. Tambah Tugas" << endl;
+    cout << "2. Tampilkan Semua Tugas" << endl;
+    cout << "3. Tandai Tugas Selesai" << endl;
+    cout << "4. Hapus Tugas" << endl;
+    cout << "5. Keluar" << endl;
+    cout << "Pilih opsi: ";
+}
+
+void addTask(vector<Task>& tasks) {
+    Task newTask;
+    cout << "Masukkan deskripsi tugas: ";
+    cin.ignore();
+    getline(cin, newTask.description);
+    newTask.isCompleted = false;
+    tasks.push_back(newTask);
+    cout << "Tugas berhasil ditambahkan!" << endl;
+}
+
+void displayTasks(const vector<Task>& tasks) {
+    if (tasks.empty()) {
+        cout << "Tidak ada tugas dalam daftar.\n";
+        return;
+    }
+    cout << "\nDaftar Tugas:\n";
+    for (size_t i = 0; i < tasks.size(); ++i) {
+        cout << i + 1 << ". " << tasks[i].description;
+        if (tasks[i].isCompleted) {
+            cout << " (Selesai)";
+        }
+        cout << endl;
+    }
+}
+
+void markTaskCompleted(vector<Task>& tasks) {
+    int taskNumber;
+    displayTasks(tasks);
+    cout << "Masukkan nomor tugas yang ingin ditandai sebagai selesai: ";
+    cin >> taskNumber;
+    if (taskNumber > 0 && taskNumber <= tasks.size()) {
+        tasks[taskNumber - 1].isCompleted = true;
+        cout << "Tugas berhasil ditandai sebagai selesai!" << endl;
+    } else {
+        cout << "Nomor tugas tidak valid." << endl;
+    }
+}
+
+void deleteTask(vector<Task>& tasks) {
+    int taskNumber;
+    displayTasks(tasks);
+    cout << "Masukkan nomor tugas yang ingin dihapus: ";
+    cin >> taskNumber;
+    if (taskNumber > 0 && taskNumber <= tasks.size()) {
+        tasks.erase(tasks.begin() + taskNumber - 1);
+        cout << "Tugas berhasil dihapus!" << endl;
+    } else {
+        cout << "Nomor tugas tidak valid." << endl;
+    }
+}
+
+int main() {
+    vector<Task> tasks;
+    int choice;
+
+    do {
+        displayMenu();
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                addTask(tasks);
+                break;
+            case 2:
+                displayTasks(tasks);
+                break;
+            case 3:
+                markTaskCompleted(tasks);
+                break;
+            case 4:
+                deleteTask(tasks);
+                break;
+            case 5:
+                cout << "Keluar dari program. Terima kasih!" << endl;
+                break;
+            default:
+                cout << "Pilihan tidak valid. Coba lagi." << endl;
+        }
+    } while (choice != 5);
+    return 0;
+}
